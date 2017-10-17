@@ -14,7 +14,15 @@ namespace DbReflectLib.Benchmark
     {
         static void Main(string[] args)
         {
+<<<<<<< HEAD
+<<<<<<< HEAD
+            string ConnectionString = "";
+=======
             string ConnectionString = "Data Source=.;Initial Catalog=Enterprise;Integrated Security=True";
+>>>>>>> 67a0cbc... create Benchmark proj for testing cases.
+=======
+            string ConnectionString = "";
+>>>>>>> 2156183... delete duplicate benchmark project
             SqlConnection Conn = new SqlConnection(ConnectionString);
             TimeSpan executionTime = new TimeSpan();
             
