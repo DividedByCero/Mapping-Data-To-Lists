@@ -15,7 +15,7 @@ namespace DbReflectLib
         /// <typeparam name="T"></typeparam>
         /// <param name="DbConnection">The Connection Object</param>
         /// <param name="Statement">The SQL Sentences prompt to be fetch into the collection.</param>
-        /// <returns></returns>
+        /// <returns>List<Object></returns>
         public static List<T> Get<T>(System.Data.IDbConnection DbConnection, string Statement) where T : class, new()
         {
             IDbCommand dbCommand = DbConnection.CreateCommand();
@@ -24,7 +24,7 @@ namespace DbReflectLib
             //Instance to be compare with the especific model.
             Type BaseInstance = new T().GetType();
             //Getting the properties;
-            System.Reflection.PropertyInfo[] ClassStruct = BaseInstance.GetProperties();
+            List<System.Reflection.PropertyInfo> ClassStruct = BaseInstance.GetProperties().ToList();
             IDataReader Reader = dbCommand.ExecuteReader();
             List<string> Columns = new List<string>();
             List<T> ListOfObjectsToReturn = new List<T>();
@@ -36,17 +36,26 @@ namespace DbReflectLib
             while (Reader.Read())
             {
                 T instance = new T();
-                for (int ctd = 0; ctd < Columns.Count; ctd++)
+                for (int ctd = 0; ctd < ClassStruct.Count(); ctd++)
                 {
-                    Console.WriteLine(Reader.GetValue(ctd).ToString());
-                    object value = Reader.GetValue(ctd);
-                    ClassStruct.First(property => property.Name == Columns[ctd])
+                    object value = Reader.GetValue(Reader.GetOrdinal(ClassStruct[ctd].Name));
+                    ClassStruct.First(property => property.Name == ClassStruct[ctd].Name)
                         .SetValue(instance, (value.GetType() == typeof(DBNull) ? null : value), null);
                 }
                 ListOfObjectsToReturn.Add(instance);
             }
 
             return ListOfObjectsToReturn;
+        }
+
+        public static List<T> Get<T>(System.Data.IDbConnection DbConnection, string Statement, out TimeSpan executionTime) where T : class, new()
+        {
+            System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
+            watch.Start();
+            List<T> result = Get<T>(DbConnection, Statement);
+            watch.Stop();
+            executionTime = watch.Elapsed;
+            return result;
         }
 
     }
