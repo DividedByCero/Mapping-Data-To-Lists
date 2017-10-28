@@ -1,4 +1,4 @@
-#Getting Data
+## Mapping Records
 
 ```csharp
 string ConnectionString = "...";
