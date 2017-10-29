@@ -1,15 +1,15 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace DbReflectLib.Tests
+namespace SimpleDbToolkit.Tests
 {
     [TestClass]
-    public class DataResultTests
+    public class MapperTestCase
     {
         [TestMethod]
-        public void ReturnOneItemOrMore()
+        public void DidTheLogicFlowGoesWell()
         {
-            //...
+
         }
     }
 }

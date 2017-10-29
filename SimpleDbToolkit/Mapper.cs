@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 
-namespace DbReflectLib
+namespace SimpleDbToolkit
 {
     public class Mapper
     {
@@ -19,19 +19,13 @@ namespace DbReflectLib
         public static List<T> Get<T>(System.Data.IDbConnection DbConnection, string Statement) where T : class, new()
         {
             IDbCommand dbCommand = DbConnection.CreateCommand();
-            DbConnection.Open();
             dbCommand.CommandText = Statement;
-            //Instance to be compare with the especific model.
-            Type BaseInstance = new T().GetType();
-            //Getting the properties;
-            List<System.Reflection.PropertyInfo> ClassStruct = BaseInstance.GetProperties().ToList();
+            DbConnection.Open();
+            //get properties of the base class;
+            IList<System.Reflection.PropertyInfo> ClassStruct = new T().GetType().GetProperties().ToList();
             IDataReader Reader = dbCommand.ExecuteReader();
-            List<string> Columns = new List<string>();
+            IEnumerable<string> Columns = Reader.GetSchemaTable().Select().Select(x => x[0].ToString());
             List<T> ListOfObjectsToReturn = new List<T>();
-            foreach (DataRow item in Reader.GetSchemaTable().Rows)
-            {
-                Columns.Add(item[0].ToString());
-            }
 
             while (Reader.Read())
             {
@@ -45,6 +39,8 @@ namespace DbReflectLib
                 ListOfObjectsToReturn.Add(instance);
             }
 
+            DbConnection.Close();
+
             return ListOfObjectsToReturn;
         }
 
@@ -57,6 +53,5 @@ namespace DbReflectLib
             executionTime = watch.Elapsed;
             return result;
         }
-
     }
 }
