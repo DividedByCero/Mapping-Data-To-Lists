@@ -69,10 +69,17 @@
   </Choose>
   <ItemGroup>
     <Compile Include="MapperTestCase.cs" />
+    <Compile Include="MockObjects\MockItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SimpleDbToolkit\SimpleDbToolkit.csproj">
+      <Project>{c58e52c8-3aad-4f8c-97d5-fe61f31f214d}</Project>
+      <Name>SimpleDbToolkit</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
