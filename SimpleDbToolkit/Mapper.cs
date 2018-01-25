@@ -53,5 +53,25 @@ namespace SimpleDbToolkit
             executionTime = watch.Elapsed;
             return result;
         }
+
+        public static T Execute<T>(System.Data.IDbConnection DbConnection, string Statement)
+        {
+            var command = DbConnection.CreateCommand();
+            command.CommandText = Statement;
+            try
+            {
+                object StatementResult = command.ExecuteScalar();
+                return (T)StatementResult;
+
+            }
+            catch ( InvalidCastException e)
+            {
+                throw e;
+            }
+            catch ( Exception e)
+            {
+                throw e;
+            }
+        }
     }
 }
