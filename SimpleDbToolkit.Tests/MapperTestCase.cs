@@ -11,7 +11,7 @@ namespace SimpleDbToolkit.Tests
     public class MapperTestCase
     {
         [TestMethod]
-        public void DoesTheFlowGoesAsExpected()
+        public void MapperGetFlowGoesAsExpected()
         {
             var connection = new Mock<IDbConnection>();
             var reader = new Mock<IDataReader>();
