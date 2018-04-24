@@ -25,12 +25,13 @@ namespace SimpleDbToolkit.Tests
         [TestMethod]
         public void ExecuteCastToTypes()
         {
-            ExecuteScalarWrapper<int>(1);
-            ExecuteScalarWrapper<long>((long)1);
-            ExecuteScalarWrapper<short>((short)1);
-            ExecuteScalarWrapper<float>((float)1);
-            ExecuteScalarWrapper<object>(null);
-            ExecuteScalarWrapper<string>("");
+            Assert.AreEqual(ExecuteScalarWrapper<int>(1), 1);
+            Assert.AreEqual(ExecuteScalarWrapper<long>((long)1), 1);
+            Assert.AreEqual(ExecuteScalarWrapper<short>((short)1), 1);
+            Assert.AreEqual(ExecuteScalarWrapper<float>((float)1), 1);
+            Assert.AreEqual(ExecuteScalarWrapper<double>(1.23), 1.23);
+            Assert.AreEqual(ExecuteScalarWrapper<object>(null), null);
+            Assert.AreEqual(ExecuteScalarWrapper<string>(""), "");
         }
 
         [TestMethod]

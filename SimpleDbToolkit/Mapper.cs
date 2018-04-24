@@ -12,20 +12,18 @@ namespace SimpleDbToolkit
         /// <summary>
         /// Get a Collection of List<T> Objects from a ConnectionObject based in a SQL Statement"/>
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="DbConnection">The Connection Object</param>
-        /// <param name="Statement">The SQL Sentences prompt to be fetch into the collection.</param>
-        /// <returns>List<Object></returns>
         public static List<T> Get<T>(System.Data.IDbConnection DbConnection, string Statement) where T : class, new()
         {
             IDbCommand dbCommand = DbConnection.CreateCommand();
             dbCommand.CommandText = Statement;
             DbConnection.Open();
-            //get properties of the base class;
             IList<System.Reflection.PropertyInfo> ClassStruct = new T().GetType().GetProperties().ToList();
             IDataReader Reader = dbCommand.ExecuteReader();
-            IEnumerable<string> Columns = Reader.GetSchemaTable().Select().Select(x => x[0].ToString());
             List<T> ListOfObjectsToReturn = new List<T>();
+            IEnumerable<string> Columns = Reader.GetSchemaTable()
+                                                .Select()
+                                                .Select(x => x[0].ToString());
+
 
             while (Reader.Read())
             {
@@ -44,6 +42,9 @@ namespace SimpleDbToolkit
             return ListOfObjectsToReturn;
         }
 
+        /// <summary>
+        /// Get a Collection of List<T> Objects from a ConnectionObject based in a SQL Statement"/>
+        /// </summary>
         public static List<T> Get<T>(System.Data.IDbConnection DbConnection, string Statement, out TimeSpan executionTime) where T : class, new()
         {
             System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
@@ -54,10 +55,14 @@ namespace SimpleDbToolkit
             return result;
         }
 
-        public static T Execute<T>(System.Data.IDbConnection DbConnection, string Statement)
+        //ToDo : test parameters[]
+        public static T Execute<T>(System.Data.IDbConnection DbConnection, string Statement, params object[] parameters)
         {
             var command = DbConnection.CreateCommand();
             command.CommandText = Statement;
+
+            foreach (var param in parameters) command.Parameters.Add(param);
+
             try
             {
                 object StatementResult = command.ExecuteScalar();

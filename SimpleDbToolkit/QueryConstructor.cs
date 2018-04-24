@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using SimpleDbToolkit.Annotations;
 namespace SimpleDbToolkit
 {
-    public class QueryConstructor<T>
+    public static class QueryConstructor<T> where T : class, new()
     {
         private string ResolveColumnValue(object value)
         {
@@ -46,6 +46,24 @@ namespace SimpleDbToolkit
 
             builder.Append(string.Format(" VALUES({0});", string.Join(", ", values.ToArray())));
             return builder.ToString();
+        public static string SelectAll() 
+        {
+            Type sample = new T().GetType();
+            PropertyInfo[] props = sample.GetProperties();
+            var statement = new string[props.Count() + 3];
+            statement[0] = "SELECT";
+            int x = 1;
+
+            foreach(var prop in props)
+            {
+                statement[x] = prop.Name + ",";
+                x++;
+            }
+
+            statement[x++] = "FROM";
+            statement[x++] = sample.Name;
+
+            return string.Join(" ", statement);
         }
     }
 }
