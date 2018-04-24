@@ -10,8 +10,9 @@ namespace SimpleDbToolkit.Tests
     public class QueryConstructorTest
     {
         [TestMethod]
-        public void DoesGenerateAInsertStatement()
+        public void GenerateAValidInsertStatement()
         {
+            string expected = "INSERT INTO CUSTOMERS(Name, CreditNumber, Identification, LastName) VALUES('Bar', 1231231, 0, 'Foo');";
             Customer customer = new Customer();
             customer.CreditNumber = 1231231;
             customer.Id = 42;
@@ -20,6 +21,9 @@ namespace SimpleDbToolkit.Tests
 
             var constructor = new QueryConstructor<Customer>();
             string result = constructor.Insert(customer);
+
+            Assert.AreEqual(result, expected);
+
         }
     }
 }
