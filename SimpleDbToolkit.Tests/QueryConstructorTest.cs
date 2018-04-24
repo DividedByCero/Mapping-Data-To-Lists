@@ -10,6 +10,17 @@ namespace SimpleDbToolkit.Tests
     public class QueryConstructorTest
     {
         [TestMethod]
+        public void DoesSelectAllReturnCorrectly()
+        {
+            var constructor = new QueryConstructor<MockItem>();
+
+            var query = constructor.SelectAll();
+
+            Assert.AreEqual(query, "SELECT Id, Name, FROM MockItem");
+
+        }
+
+        [TestMethod]
         public void GenerateAValidInsertStatement()
         {
             string expected = "INSERT INTO CUSTOMERS(Name, CreditNumber, Identification, LastName) VALUES('Bar', 1231231, 0, 'Foo');";

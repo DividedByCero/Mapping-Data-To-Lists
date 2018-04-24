@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SimpleDbToolkit.Annotations;
+using System.Reflection;
+
 namespace SimpleDbToolkit
 {
-    public static class QueryConstructor<T> where T : class, new()
+    public class QueryConstructor<T> where T : class, new()
     {
         private string ResolveColumnValue(object value)
         {
@@ -31,7 +33,8 @@ namespace SimpleDbToolkit
         public string Insert(T item)
         {
             var type = item.GetType();
-            var properties = type.GetProperties().Where(prop => {
+            var properties = type.GetProperties().Where(prop =>
+            {
                 return validateCustomAttribute<AutoIncrement>(prop);
             });
 
@@ -40,13 +43,16 @@ namespace SimpleDbToolkit
             string tablename = TableNameAttribute == null ? type.Name : ((TableName)TableNameAttribute).Name;
 
             builder.Append(string.Format("{0}({1})", tablename, String.Join(", ", properties.Select(prop => prop.Name))));
-            IEnumerable <string> values = properties.Select(x => {
+            IEnumerable<string> values = properties.Select(x =>
+            {
                 return ResolveColumnValue(x.GetValue(item));
             });
 
             builder.Append(string.Format(" VALUES({0});", string.Join(", ", values.ToArray())));
             return builder.ToString();
-        public static string SelectAll() 
+        }
+
+        public string SelectAll() 
         {
             Type sample = new T().GetType();
             PropertyInfo[] props = sample.GetProperties();
