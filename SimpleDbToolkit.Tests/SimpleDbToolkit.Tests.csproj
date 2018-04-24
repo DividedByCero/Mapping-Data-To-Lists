@@ -71,9 +71,11 @@
   </Choose>
   <ItemGroup>
     <Compile Include="MapperTestCase.cs" />
+    <Compile Include="MockObjects\Customer.cs" />
     <Compile Include="MockObjects\MockItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MapperExecuteTestCase.cs" />
+    <Compile Include="QueryConstructorTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
